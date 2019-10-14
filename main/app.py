@@ -33,19 +33,19 @@ def oracle_connect(sql, get_result=False):
     c = conn.cursor()
     x = c.execute(sql)
 
-    result = True
+    flag_result = True
     if get_result:
         results = x.fetchall()
         print(results)
         for result in results:
             for item in result:
                 if item == 0:
-                    result = False
+                    flag_result = False
                     break
     c.close()
     conn.commit()
     conn.close()
-    return result
+    return flag_result
 
 
 def begin():
@@ -71,7 +71,9 @@ def begin():
 
 def url_function():
     print('url_function')
-    urllib2.urlopen("http://202.102.74.53/stat/jobs/count/weixin2.php")
+    response = urllib2.urlopen("http://202.102.74.53/stat/jobs/count/weixin2.php")
+    time.sleep(1 * 60)
+    print response.read()
 
 
 def check_zero(yesterday_short):
@@ -101,3 +103,4 @@ if __name__ == '__main__':
     scheduler.start()
 
     # begin()
+    # url_function()
