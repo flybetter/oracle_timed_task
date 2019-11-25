@@ -80,6 +80,12 @@ def check_zero(yesterday_short):
     print('start check_zero')
     sql = create_wechat_sql(yesterday_short);
     flag = oracle_connect(sql, True)
+
+    # if the time is over 17 o'clock pm , i will set the True to focus to close the scheduler.
+    timez_tmp = pytz.timezone('Asia/Shanghai')
+    now = datetime.now(timez_tmp)
+    if now.strftime('%H') > 17:
+        return True
     return flag
 
 
@@ -96,11 +102,14 @@ def procedure(the_day_before_yesterday, yesterday_short):
 
 if __name__ == '__main__':
     # 8点开始同步
-    timez = pytz.timezone('Asia/Shanghai')
-    scheduler = BlockingScheduler(timezone=timez)
-    scheduler.add_executor('processpool')
-    scheduler.add_job(begin, 'cron', hour=9, minute=30, second=00, misfire_grace_time=30)
-    scheduler.start()
+    # timez = pytz.timezone('Asia/Shanghai')
+    # scheduler = BlockingScheduler(timezone=timez)
+    # scheduler.add_executor('processpool')
+    # scheduler.add_job(begin, 'cron', hour=9, minute=30, second=00, misfire_grace_time=30)
+    # scheduler.start()
 
     # begin()
     # url_function()
+    timez_tmp = pytz.timezone('Asia/Shanghai')
+    now = datetime.now(timez_tmp)
+    print(now.strftime('%H') > 17)
